@@ -1,0 +1,280 @@
+/* style.css */
+
+/* กำหนดพื้นฐานสำหรับทั้งหน้าเว็บ */
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* ทำให้ body สูงเต็มหน้าจอ */
+    margin: 0;
+    background-color: #f4f7f6; /* สีพื้นหลังอ่อนๆ */
+    color: #333;
+}
+
+#app {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px; /* กำหนดความกว้างสูงสุดของแอป */
+    text-align: center;
+    box-sizing: border-box; /* รวม padding/border ในความกว้าง */
+}
+
+/* สไตล์สำหรับส่วน Login */
+#login-section h2 {
+    color: #007bff;
+    margin-bottom: 25px;
+}
+
+#login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* ระยะห่างระหว่างฟอร์ม */
+    margin-bottom: 20px;
+}
+
+#login-form label {
+    font-weight: bold;
+    text-align: left;
+    margin-bottom: 5px;
+}
+
+#login-form input[type="password"] {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    width: calc(100% - 24px); /* ความกว้างเต็มที่ ลบ padding */
+}
+
+#login-form button[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#login-form button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+.error-message {
+    color: #dc3545; /* สีแดงสำหรับข้อความ Error */
+    margin-top: 10px;
+    font-size: 0.9rem;
+    height: 1.2em; /* กันไม่ให้ layout กระโดดเมื่อมีข้อความ Error */
+}
+
+/* สไตล์สำหรับส่วนปฏิทิน */
+#calendar-section {
+    padding: 20px 0;
+}
+
+#calendar-section .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+#calendar-section .header h1 {
+    margin: 0;
+    color: #007bff;
+    font-size: 1.8rem;
+}
+
+#calendar-section .header button {
+    background-color: #6c757d;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#calendar-section .header button:hover {
+    background-color: #5a6268;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* 7 คอลัมน์สำหรับวันในสัปดาห์ */
+    gap: 5px;
+    margin-bottom: 20px;
+}
+
+.day-name {
+    font-weight: bold;
+    padding: 10px 5px;
+    background-color: #e9ecef;
+    border-radius: 5px;
+    font-size: 0.9rem;
+}
+
+.day-cell {
+    /* สไตล์เบื้องต้นของแต่ละช่องวันในปฏิทิน */
+    padding: 15px 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    min-height: 80px; /* กำหนดความสูงขั้นต่ำเพื่อรองรับเนื้อหา */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+    font-size: 1rem;
+    position: relative;
+    overflow: hidden; /* ซ่อนเนื้อหาที่เกิน */
+}
+
+.day-cell:hover {
+    background-color: #e0f7fa;
+    border-color: #007bff;
+}
+
+.day-number {
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-bottom: 5px;
+    width: 100%;
+    text-align: right;
+    padding-right: 5px;
+    box-sizing: border-box;
+}
+
+.day-note {
+    font-size: 0.8rem;
+    color: #007bff;
+    text-align: center;
+    word-break: break-word; /* ให้คำที่ยาวขึ้นบรรทัดใหม่ */
+    padding: 0 5px;
+    max-height: 40px; /* จำกัดความสูงของโน้ตที่แสดงในช่องวัน */
+    overflow: hidden; /* ซ่อนส่วนเกินถ้าโน้ตยาวไป */
+    text-overflow: ellipsis; /* แสดง ... ถ้าข้อความยาวเกิน */
+    white-space: nowrap; /* ป้องกันการขึ้นบรรทัดใหม่โดยไม่จำเป็น */
+}
+
+.empty-day {
+    background-color: #f8f9fa;
+    border: 1px dashed #eee;
+    cursor: default;
+}
+
+.empty-day:hover {
+    background-color: #f8f9fa;
+    border-color: #eee;
+}
+
+#logout-button {
+    background-color: #dc3545;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+#logout-button:hover {
+    background-color: #c82333;
+}
+
+/* สไตล์สำหรับ Pop-up (Modal) */
+.modal {
+    display: none; /* ซ่อนโดยค่าเริ่มต้น */
+    position: fixed; /* อยู่ด้านบนของเนื้อหาอื่น */
+    z-index: 1; /* อยู่ด้านหน้าสุด */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* เปิดใช้งาน scroll ถ้าเนื้อหาใหญ่เกิน */
+    background-color: rgba(0, 0, 0, 0.4); /* พื้นหลังทึบแสงเล็กน้อย */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 25px;
+    border: 1px solid #888;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+    box-sizing: border-box;
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#modal-date {
+    color: #007bff;
+    margin-bottom: 15px;
+    text-align: left;
+    font-size: 1.5rem;
+}
+
+#note-text {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    min-height: 120px;
+    resize: vertical; /* อนุญาตให้ผู้ใช้ปรับขนาดตามแนวตั้ง */
+    font-size: 1rem;
+}
+
+#note-modal button {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 10px;
+}
+
+#note-modal button:hover {
+    background-color: #218838;
+}
+
+#delete-note-button {
+    background-color: #dc3545;
+}
+
+#delete-note-button:hover {
+    background-color: #c82333;
+}

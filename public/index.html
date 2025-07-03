@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ปฏิทินส่วนตัวของฉัน</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <div id="login-section">
+            <h2>เข้าสู่ระบบปฏิทิน</h2>
+            <form id="login-form">
+                <label for="password">รหัสผ่าน:</label>
+                <input type="password" id="password" name="password" required>
+                <button type="submit">เข้าสู่ระบบ</button>
+                <p id="login-message" class="error-message"></p>
+            </form>
+        </div>
+
+        <div id="calendar-section" style="display: none;">
+            <div class="header">
+                <button id="prev-month">&lt; เดือนก่อนหน้า</button>
+                <h1 id="current-month-year"></h1>
+                <button id="next-month">เดือนถัดไป &gt;</button>
+            </div>
+            <div class="calendar-grid">
+                <div class="day-name">อาทิตย์</div>
+                <div class="day-name">จันทร์</div>
+                <div class="day-name">อังคาร</div>
+                <div class="day-name">พุธ</div>
+                <div class="day-name">พฤหัสบดี</div>
+                <div class="day-name">ศุกร์</div>
+                <div class="day-name">เสาร์</div>
+                </div>
+            <button id="logout-button">ออกจากระบบ</button>
+        </div>
+
+        <div id="note-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <h3 id="modal-date"></h3>
+                <textarea id="note-text" placeholder="พิมพ์บันทึกของคุณที่นี่..."></textarea>
+                <button id="save-note-button">บันทึก</button>
+                <button id="delete-note-button" style="display: none;">ลบโน้ต</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "echo 'No complex build step required for plain HTML/JS/CSS, deploying public folder directly'" // ***เพิ่มบรรทัดนี้***
+    "build": "echo 'No complex build step required for plain HTML/JS/CSS, deploying public folder directly'"
   },
   "keywords": [],
   "author": "",

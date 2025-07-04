@@ -1,17 +1,14 @@
 {
-  "name": "my-calendar-app",
+  "name": "my-calendar-frontend",
   "version": "1.0.0",
+  "description": "Frontend for my calendar application",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "echo 'No complex build step required for plain HTML/JS/CSS, deploying public folder directly'" // ***เพิ่มบรรทัดนี้***
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "description": "",
-  "dependencies": {
-    "bcrypt": "^6.0.0",
-    "express": "^5.1.0",
-    "pg": "^8.16.3"
-  }
+  "license": "ISC"
+  // ถ้ามี dependencies อื่นๆ ของ Frontend ก็เพิ่มตรงนี้ได้
 }

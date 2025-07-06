@@ -24,7 +24,10 @@
                 <h1 id="current-month-year"></h1>
                 <button id="next-month">เดือนถัดไป &gt;</button>
             </div>
+            <!-- Added a span to display the logged-in user's name -->
+            <p id="logged-in-user" class="text-lg font-semibold text-gray-700 mb-4"></p>
             <div class="calendar-grid">
+                <!-- Day names will be inserted here by JavaScript or can be hardcoded -->
                 <div class="day-name">อาทิตย์</div>
                 <div class="day-name">จันทร์</div>
                 <div class="day-name">อังคาร</div>
@@ -32,7 +35,8 @@
                 <div class="day-name">พฤหัสบดี</div>
                 <div class="day-name">ศุกร์</div>
                 <div class="day-name">เสาร์</div>
-                </div>
+                <!-- Calendar days will be inserted here by JavaScript -->
+            </div>
             <button id="logout-button">ออกจากระบบ</button>
         </div>
 

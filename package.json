@@ -1,14 +1,12 @@
 {
-  "name": "my-calendar-frontend",
+  "name": "my-calendar-app",
   "version": "1.0.0",
-  "description": "Frontend for my calendar application",
+  "description": "Personal Calendar Frontend",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "echo 'No complex build step required for plain HTML/JS/CSS, deploying public folder directly'"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC"
-  // ถ้ามี dependencies อื่นๆ ของ Frontend ก็เพิ่มตรงนี้ได้
 }

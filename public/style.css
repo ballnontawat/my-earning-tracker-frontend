@@ -1,159 +1,185 @@
 /* public/style.css */
 
-/* Basic Reset & Body Styling */
+/* Base styles for the entire page */
 body {
     font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
+    min-height: 100vh; /* Make body full viewport height */
     margin: 0;
-    background-color: #f4f4f4;
+    background-color: #f4f7f6; /* Light background color */
     color: #333;
 }
 
 #app {
-    background-color: #fff;
-    padding: 20px;
+    background-color: #ffffff;
+    padding: 30px;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    max-width: 900px; /* Adjust max-width for larger calendars */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     width: 100%;
-    box-sizing: border-box;
-    margin: 20px;
+    max-width: 900px; /* ปรับค่านี้สำหรับ Desktop: ทำให้ปฏิทินกว้างขึ้น */
+    text-align: center;
+    box-sizing: border-box; /* Include padding/border in width */
 }
 
-/* Login Section */
-#login-section {
-    text-align: center;
-    padding: 40px;
-}
+/* Styles for the Login section */
 #login-section h2 {
-    margin-bottom: 20px;
-    color: #0056b3;
+    color: #007bff;
+    margin-bottom: 25px;
 }
+
 #login-form {
     display: flex;
     flex-direction: column;
-    align-items: center;
-}
-#login-form label {
-    margin-bottom: 8px;
-    font-weight: bold;
-}
-#login-form input[type="password"] {
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    width: 80%;
-    max-width: 300px;
-    font-size: 1rem;
-}
-#login-form button {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s ease;
-}
-#login-form button:hover {
-    background-color: #0056b3;
-}
-.error-message {
-    color: red;
-    margin-top: 10px;
+    gap: 15px; /* Spacing between form elements */
+    margin-bottom: 20px;
 }
 
-/* Calendar Header */
-.header {
+#login-form label {
+    font-weight: bold;
+    text-align: left;
+    margin-bottom: 5px;
+}
+
+#login-form input[type="password"] {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    width: calc(100% - 24px); /* Full width minus padding */
+}
+
+#login-form button[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#login-form button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+.error-message {
+    color: #dc3545; /* Red color for error messages */
+    margin-top: 10px;
+    font-size: 0.9rem;
+    height: 1.2em; /* Prevent layout jump when error message appears */
+}
+
+/* Styles for the Calendar section */
+#calendar-section {
+    padding: 20px 0;
+}
+
+#calendar-section .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-    padding: 0 10px;
+    flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+    gap: 10px; /* Add gap for wrapped items */
 }
-.header button {
+
+#calendar-section .header h1 {
+    margin: 0;
+    color: #007bff;
+    font-size: 1.8rem;
+    flex-grow: 1; /* Allow header to take available space */
+    text-align: center; /* Center align title */
+}
+
+#calendar-section .header button {
     background-color: #6c757d;
     color: white;
     padding: 8px 15px;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
     cursor: pointer;
-    font-size: 1rem;
     transition: background-color 0.3s ease;
 }
-.header button:hover {
+
+#calendar-section .header button:hover {
     background-color: #5a6268;
 }
-#current-month-year {
-    font-size: 1.8rem;
-    font-weight: bold;
-    color: #333;
-    text-align: center;
-    flex-grow: 1; /* Allow heading to take available space */
-}
 
-/* Logged-in user display */
-.user-display {
-    text-align: center;
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: #007bff;
-    margin-bottom: 15px;
-}
-
-/* Calendar Grid */
 .calendar-grid {
     display: grid;
-    grid-template-columns: repeat(7, 1fr); /* 7 equal columns */
-    gap: 5px; /* Space between cells */
-    border: 1px solid #ddd;
-    padding: 5px;
-    border-radius: 5px;
-    background-color: #fff;
+    /* สำหรับ Desktop: 7 คอลัมน์ */
+    grid-template-columns: repeat(7, 1fr);
+    /* กำหนดความสูงขั้นต่ำ 120px และขยายอัตโนมัติตามเนื้อหา */
+    grid-auto-rows: minmax(120px, auto);
+    gap: 5px;
+    margin-bottom: 20px;
 }
 
 .day-name {
     font-weight: bold;
-    text-align: center;
     padding: 10px 5px;
     background-color: #e9ecef;
-    border-bottom: 1px solid #ddd;
-    white-space: nowrap; /* Prevent day names from wrapping */
+    border-radius: 5px;
+    font-size: 0.9rem;
+    text-align: center; /* Center the day names */
 }
 
 .day-cell {
-    border: 1px solid #eee;
-    padding: 10px 5px;
-    min-height: 100px; /* Minimum height for day cells */
+    padding: 15px 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    min-height: 120px; /* ค่า min-height สำหรับ Desktop */
     display: flex;
-    flex-direction: column;
-    align-items: flex-start; /* Align content to top-left */
+    flex-direction: column; /* จัดเรียงเนื้อหาในแนวตั้ง */
+    justify-content: flex-start; /* จัดเนื้อหาเริ่มต้นจากด้านบน */
+    align-items: flex-start; /* *** จัดเนื้อหาชิดซ้ายของเซลล์ (เพื่อให้ชื่อวันดูดีขึ้น) *** */
     cursor: pointer;
-    transition: background-color 0.2s ease;
-    border-radius: 4px;
-    box-sizing: border-box; /* Include padding/border in cell width/height */
-    position: relative; /* For day-name-in-cell absolute positioning */
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+    font-size: 1rem;
+    position: relative;
+    overflow: visible; /* อนุญาตให้เนื้อหาภายในขยายออกไปได้ */
 }
 
 .day-cell:hover {
-    background-color: #f0f0f0;
+    background-color: #e0f7fa;
+    border-color: #007bff;
 }
 
-.empty-day {
-    background-color: #f8f8f8;
-    cursor: default;
+/* Styles for specific days of the week */
+.day-cell.sunday {
+    background-color: #ffe0e0; /* Light red for Sunday */
+    color: #dc3545; /* Darker red text */
+}
+
+.day-cell.saturday {
+    background-color: #e0ffe0; /* Light green for Saturday */
+    color: #28a745; /* Darker green text */
 }
 
 .day-number {
-    font-size: 1.2rem;
     font-weight: bold;
-    color: #555;
-    margin-bottom: 5px; /* Space between number and notes */
+    font-size: 1.1em; /* ขนาดใหญ่กว่าปกติเล็กน้อย */
+    margin-bottom: 5px; /* ระยะห่างด้านล่างจากตัวเลข */
+    width: 100%;        /* ใช้ความกว้างเต็มที่ของช่อง */
+    text-align: right; /* จัดชิดขวาของช่อง */
+    padding-right: 5px; /* เว้นขอบด้านขวาเล็กน้อย */
+    box-sizing: border-box;
+    display: block; /* ควรเป็น block-level เพื่อให้จัดบรรทัดได้ดี */
+    color: #333;    /* สีของตัวเลข */
+    order: 2; /* *** ให้ day-number อยู่หลังจาก day-name-in-cell ใน flexbox *** */
+}
+
+/* NEW: Style for the day name inside the cell */
+.day-name-in-cell {
+    display: none; /* *** โดยค่าเริ่มต้นให้ซ่อนไว้ (สำหรับ Desktop) *** */
+    font-size: 0.8em; /* ขนาดฟอนต์เล็กกว่าตัวเลขวัน */
+    color: #666; /* สีเทา */
+    margin-bottom: 2px; /* เว้นระยะห่างกับตัวเลขวัน */
+    padding-left: 5px; /* เว้นขอบซ้ายเล็กน้อย */
+    order: 1; /* *** ให้ day-name-in-cell อยู่ก่อน day-number ใน flexbox *** */
 }
 
 .day-note {
@@ -162,86 +188,66 @@ body {
     word-break: break-word; /* ทำให้คำที่ยาวมากๆ ตัดขึ้นบรรทัดใหม่ได้ */
     overflow-wrap: break-word; /* ตัวนี้มีความเข้ากันได้ดีกว่า word-break */
     padding: 0 5px;
-    margin-top: 5px; /* เพิ่มระยะห่างด้านบนเล็กน้อยเพื่อให้แยกจากตัวเลขวัน/ชื่อวัน */
+    margin-top: 5px; /* *** เพิ่มระยะห่างด้านบนเล็กน้อยเพื่อให้แยกจากตัวเลขวัน/ชื่อวัน *** */
     width: 100%; /* ให้ใช้ความกว้างที่มีอยู่ทั้งหมดของ day-cell */
     box-sizing: border-box;
-    border-radius: 3px;
     white-space: normal; /* อนุญาตให้ข้อความขึ้นบรรทัดใหม่ได้ */
-    max-height: none;    /* ลบการจำกัดความสูง */
-    overflow: visible;   /* ทำให้เนื้อหาที่เกินมองเห็นได้ ไม่ถูกซ่อน */
+    max-height: none;     /* ลบการจำกัดความสูง */
+    overflow: visible;    /* ทำให้เนื้อหาที่เกินมองเห็นได้ ไม่ถูกซ่อน */
     text-overflow: clip; /* ไม่แสดง ... เมื่อข้อความขยายได้แล้ว */
-    margin-bottom: 2px; /* เพิ่มระยะห่างระหว่างโน้ต */
 }
 
 /* User-specific note colors */
-.note-ball {
-    background-color: #e0f7fa; /* Light cyan */
-    border-left: 3px solid #00bcd4; /* Cyan border */
-    color: #005662;
+.day-note.note-ball {
+    color: black;
+}
+.day-note.note-ram {
+    color: blue;
+}
+/* Default note color if no specific user color */
+.day-note:not(.note-ball):not(.note-ram) {
+    color: #007bff; /* Original blue color */
 }
 
-.note-ram {
-    background-color: #ffe0b2; /* Light orange */
-    border-left: 3px solid #ff9800; /* Orange border */
-    color: #b35900;
+.empty-day {
+    background-color: #f8f9fa;
+    border: 1px dashed #eee;
+    cursor: default;
 }
 
-/* Specific day styling */
-.sunday {
-    color: #d9534f; /* Red for Sunday */
-    background-color: #fcf8f2; /* Light background for Sunday */
+.empty-day:hover {
+    background-color: #f8f9fa;
+    border-color: #eee;
 }
 
-.saturday {
-    color: #0275d8; /* Blue for Saturday */
-    background-color: #f2f8fc; /* Light background for Saturday */
-}
-
-.weekday {
-    color: #333;
-}
-
-/* Logout Button */
 #logout-button {
-    background-color: #f44336;
+    background-color: #dc3545;
     color: white;
     padding: 10px 20px;
     border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 20px;
-    display: block;
-    width: fit-content;
-    margin-left: auto;
-    margin-right: auto;
+    border-radius: 5px;
     font-size: 1rem;
+    cursor: pointer;
     transition: background-color 0.3s ease;
+    margin-top: 20px;
 }
+
 #logout-button:hover {
-    background-color: #d32f2f;
+    background-color: #c82333;
 }
 
-/* Day name in cell for small screens */
-.day-name-in-cell {
-    display: none; /* Hidden by default on larger screens */
-    font-size: 0.7em;
-    color: #888;
-    position: absolute;
-    top: 5px;
-    right: 5px;
-}
-
-/* Modal */
+/* Styles for Pop-up (Modal) */
 .modal {
     display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 100; /* Sit on top */
+    position: fixed; /* Stay on top of other content */
+    z-index: 100; /* Frontmost */
     left: 0;
     top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Enable scroll if content is too large */
+    background-color: rgba(0, 0, 0, 0.4); /* Slightly opaque background */
+    display: flex;
     justify-content: center;
     align-items: center;
 }
@@ -249,81 +255,150 @@ body {
 .modal-content {
     background-color: #fefefe;
     margin: auto;
-    padding: 20px;
+    padding: 25px;
     border: 1px solid #888;
     border-radius: 8px;
-    width: 80%; /* Could be responsive */
+    width: 90%;
     max-width: 500px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     position: relative;
-    display: flex; /* Flexbox for modal content layout */
-    flex-direction: column;
-    gap: 15px; /* Spacing between elements in modal */
+    box-sizing: border-box;
 }
 
-.modal-content h3 {
-    margin-top: 0;
-    margin-bottom: 10px;
-    color: #0056b3;
-    text-align: center;
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    cursor: pointer;
 }
-/* Removed empty .modal-content h4 {} ruleset */
 
-/* Responsive adjustments for smaller screens */
-@media (max-width: 768px) { /* สำหรับแท็บเล็ตและอุปกรณ์ขนาดเล็กกว่า */
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#modal-date {
+    color: #007bff;
+    margin-bottom: 15px;
+    text-align: left;
+    font-size: 1.5rem;
+}
+
+#note-text {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    min-height: 120px;
+    resize: vertical; /* Allow vertical resizing by user */
+    font-size: 1rem;
+}
+
+#note-modal button {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 10px;
+}
+
+#note-modal button:hover {
+    background-color: #218838;
+}
+
+#delete-note-button {
+    background-color: #dc3545;
+}
+
+#delete-note-button:hover {
+    background-color: #c82333;
+}
+
+/* --- Media Queries สำหรับ Mobile / จอขนาดเล็ก (ปรับปรุงจากโค้ดเดิมของคุณ) --- */
+
+@media (max-width: 768px) { /* สำหรับหน้าจอที่มีความกว้างสูงสุด 768px (Tablet/Mobile) */
     #app {
-        margin: 10px; /* ลดระยะขอบด้านนอก */
-        padding: 10px; /* ลดระยะขอบด้านใน */
-        box-shadow: none; /* ลบเงากล่อง */
-        border-radius: 0; /* ลบขอบมน */
+        padding: 15px;
+        max-width: 95%; /* ให้ใช้ความกว้างเกือบเต็มหน้าจอมือถือ */
+        margin: 10px auto; /* Centering for mobile */
     }
 
-    .header {
-        flex-direction: column; /* จัดเรียงเดือน/ปีและปุ่มเป็นแนวตั้ง */
-        gap: 10px; /* ระยะห่างระหว่างองค์ประกอบที่ซ้อนกัน */
-        margin-bottom: 15px;
+    #calendar-section .header {
+        flex-direction: column; /* Stack header elements */
+        align-items: center;
+        gap: 10px;
+    }
+    
+    #calendar-section .header h1 {
+        font-size: 1.5rem;
+        order: 2; /* Move title below buttons on mobile */
     }
 
-    #current-month-year {
-        font-size: 1.5rem; /* ขนาดตัวอักษรสำหรับเดือน/ปีที่เล็กลง */
-    }
-
-    .header button {
-        width: 100%; /* ทำให้ปุ่มเต็มความกว้าง */
-        padding: 10px;
+    #calendar-section .header button {
+        width: 100%; /* Make buttons full width */
+        order: 1; /* Move buttons above title on mobile */
     }
 
     .calendar-grid {
-        gap: 2px; /* ลดระยะห่างระหว่างเซลล์ */
-        padding: 2px; /* ลดระยะข่างในคอนเทนเนอร์กริด */
+        /* เปลี่ยนเป็น 1 คอลัมน์สำหรับจอเล็ก */
+        grid-template-columns: 1fr;
+        gap: 8px; /* ปรับ gap เล็กน้อย */
+        grid-auto-rows: minmax(90px, auto); /* ลด min-height ของแถวสำหรับมือถือ */
     }
 
     .day-name {
-        display: none; /* ซ่อนชื่อวันด้านบนสำหรับหน้าจอขนาดเล็ก */
+        display: none; /* ซ่อนแถวชื่อวันด้านบนในโหมดมือถือ */
     }
 
     .day-cell {
-        min-height: 80px; /* ความสูงขั้นต่ำของเซลล์วันที่เล็กลง */
-        padding: 5px; /* ลดระยะขอบด้านในเซลล์ */
-        font-size: 0.9em; /* ขนาดตัวอักษรสำหรับเนื้อหาเซลล์ที่เล็กลง */
+        min-height: 90px; /* ลด min-height ลงสำหรับจอเล็ก */
+        padding: 10px;
+        flex-direction: row; /* เปลี่ยนเป็นแนวนอนสำหรับ mobile day-cell */
+        justify-content: space-between; /* กระจายเนื้อหา */
+        align-items: flex-start; /* จัดเนื้อหาด้านบน */
+        flex-wrap: wrap; /* อนุญาตให้เนื้อหาขึ้นบรรทัดใหม่ได้ */
     }
 
     .day-number {
-        font-size: 1em; /* ขนาดตัวอักษรสำหรับตัวเลขวันที่เล็กลง */
-        margin-bottom: 2px;
-    }
-
-    .day-note {
-        font-size: 0.7em; /* ขนาดตัวอักษรสำหรับโน้ตที่เล็กลง */
-        padding: 0 2px;
+        text-align: left; /* จัดตัวเลขวันชิดซ้ายบนมือถือ */
+        font-size: 1.2em; /* ขนาดใหญ่ขึ้นเล็กน้อยเพื่อให้เห็นชัดเจน */
+        padding-right: 0px; /* ลบ padding-right */
+        flex-basis: 30%; /* ให้ตัวเลขใช้พื้นที่ประมาณ 30% */
+        order: 1; /* ให้ day-number อยู่ก่อน day-name-in-cell บนมือถือ */
+        margin-bottom: 0; /* No margin-bottom here */
     }
 
     .day-name-in-cell {
-        display: block; /* แสดงชื่อวันภายในเซลล์สำหรับหน้าจอขนาดเล็ก */
+        display: block; /* บนมือถือ: แสดงชื่อวันในช่อง */
+        font-size: 0.8em;
+        color: #666;
+        padding-left: 0;
+        text-align: right; /* จัดชื่อวันชิดขวาบนมือถือ */
+        flex-basis: 70%; /* ให้ชื่อวันใช้พื้นที่ประมาณ 70% */
+        order: 2; /* ให้ day-name-in-cell อยู่หลัง day-number บนมือถือ */
+        margin-bottom: 0; /* No margin-bottom here */
+    }
+    
+    .day-note {
+        font-size: 0.85rem;
+        margin-top: 5px; /* เว้นระยะห่างจากด้านบน */
+        flex-basis: 100%; /* โน้ตใช้พื้นที่เต็มความกว้างด้านล่าง */
+        order: 3; /* ให้โน้ตอยู่ด้านล่าง */
     }
 
     .modal-content {
-        width: 95%; /* ทำให้ Modal กว้างขึ้นบนหน้าจอขนาดเล็ก */
+        width: 95%;
         padding: 15px;
     }
 
@@ -332,12 +407,42 @@ body {
     }
 
     #login-form input[type="password"] {
-        width: 90%; /* ทำให้ Input กว้างขึ้น */
+        width: calc(100% - 20px);
     }
 }
 
-@media (max-width: 480px) { /* สำหรับหน้าจอที่เล็กกว่า (เช่น โทรศัพท์รุ่นเก่า) */
+@media (max-width: 480px) { /* สำหรับหน้าจอโทรศัพท์มือถือที่เล็กมากๆ */
+    #app {
+        padding: 10px;
+    }
+    #calendar-section .header h1 {
+        font-size: 1.3rem;
+    }
+    #calendar-section .header button {
+        padding: 7px 12px;
+        font-size: 0.9rem;
+    }
     .day-cell {
-        min-height: 70px; /* ปรับความสูงขั้นต่ำเพิ่มเติม */
+        min-height: 80px; /* Adjust min-height further */
+    }
+    .day-number {
+        font-size: 1.1em;
+    }
+    .day-name-in-cell {
+        font-size: 0.75em;
+    }
+    .day-note {
+        font-size: 0.8rem;
+    }
+
+    .modal-content {
+        padding: 15px;
+    }
+    #note-text {
+        min-height: 100px;
+    }
+    #note-modal button {
+        padding: 8px 15px;
+        font-size: 0.9rem;
     }
 }

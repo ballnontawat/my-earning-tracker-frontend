@@ -106,7 +106,6 @@ body {
     margin-bottom: 15px;
 }
 
-
 /* Calendar Grid */
 .calendar-grid {
     display: grid;
@@ -186,7 +185,6 @@ body {
     border-left: 3px solid #ff9800; /* Orange border */
     color: #b35900;
 }
-
 
 /* Specific day styling */
 .sunday {
@@ -269,5 +267,4 @@ body {
     color: #0056b3;
     text-align: center;
 }
-
-.modal-content h4 {
+/* Removed empty .modal-content h4 {} ruleset */

@@ -2,7 +2,7 @@
 // **สำคัญ: เปลี่ยน API_BASE_URL ให้เป็น URL ของ Back-end Server ของคุณ**
 // ถ้า Back-end รันบนเครื่องตัวเอง: 'http://localhost:3000'
 // ถ้า Deploy บน Render.com: 'https://your-app-name.onrender.com'
-const API_BASE_URL = 'postgresql://neondb_owner:npg_IOuf3JTwCvz7@ep-curly-tooth-a85ybbz9-pooler.eastus2.azure.neon.tech/neondb?sslmode=require&channel_binding=require'; // <<< แก้ไขตรงนี้ !!!
+const API_BASE_URL = 'https://my-earning-tracker-backend-api.onrender.com'; // <<< แก้ไขตรงนี้ !!!
 
 // --- DOM Elements ---
 const loginSection = document.getElementById('login-section');

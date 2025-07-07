@@ -303,3 +303,25 @@ body {
 #delete-note-button:hover {
     background-color: #c82333;
 }
+/* style.css (ต่อท้ายไฟล์เดิม) */
+
+/* --- การแก้ไขสำหรับ Calendar Grid Balance และการแสดง Note เต็ม --- */
+
+.day-cell {
+    overflow: visible;
+    justify-content: flex-start;
+}
+
+.day-note {
+    white-space: normal;
+    max-height: none;
+    overflow: visible;
+    text-overflow: clip;
+    text-align: left;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+.calendar-grid {
+    grid-auto-rows: minmax(100px, auto);
+}

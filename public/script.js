@@ -1,24 +1,27 @@
 // script.js
-const API_BASE_URL = 'YOUR_BACKEND_URL'; // **สำคัญ: เปลี่ยนเป็น URL ของ Back-end ของคุณ เช่น 'http://localhost:3000' หรือ 'https://your-app-name.onrender.com'**
+// **สำคัญ: เปลี่ยน API_BASE_URL ให้เป็น URL ของ Back-end Server ของคุณ**
+// ถ้า Back-end รันบนเครื่องตัวเอง: 'http://localhost:3000'
+// ถ้า Deploy บน Render.com: 'https://your-app-name.onrender.com'
+const API_BASE_URL = 'postgresql://neondb_owner:npg_IOuf3JTwCvz7@ep-curly-tooth-a85ybbz9-pooler.eastus2.azure.neon.tech/neondb?sslmode=require&channel_binding=require'; // <<< แก้ไขตรงนี้ !!!
 
 // --- DOM Elements ---
 const loginSection = document.getElementById('login-section');
 const loginForm = document.getElementById('login-form');
+const usernameInput = document.getElementById('username'); // เพิ่ม username input
 const passwordInput = document.getElementById('password');
 const loginMessage = document.getElementById('login-message');
 
 const calendarSection = document.getElementById('calendar-section');
-const loggedInUserDisplay = document.getElementById('logged-in-user'); // เพิ่มสำหรับแสดงชื่อผู้ใช้
+const loggedInUserDisplay = document.getElementById('logged-in-user');
 const currentMonthYearHeader = document.getElementById('current-month-year');
 const prevMonthButton = document.getElementById('prev-month');
 const nextMonthButton = document.getElementById('next-month');
 const calendarGrid = document.querySelector('.calendar-grid');
 const logoutButton = document.getElementById('logout-button');
 
-const noteModal = document.getElementById('note-modal'); // ตอนนี้คือ Earnings Modal
+const noteModal = document.getElementById('note-modal');
 const closeModalButton = document.getElementById('close-modal');
 const modalDateDisplay = document.getElementById('modal-date');
-// Elements สำหรับแสดงและกรอกข้อมูลค่าแรง
 const existingEarningsContainer = document.getElementById('existing-earnings-container');
 const displayDailyWage = document.getElementById('display-daily-wage');
 const displayOvertimePay = document.getElementById('display-overtime-pay');
@@ -28,7 +31,6 @@ const inputOvertimePay = document.getElementById('input-overtime-pay');
 const inputAllowance = document.getElementById('input-allowance');
 const saveEarningsButton = document.getElementById('save-earnings-button');
 
-// Elements สำหรับแสดงยอดรวมรายเดือน
 const totalWageDisplay = document.getElementById('total-wage-display');
 const totalOvertimeDisplay = document.getElementById('total-overtime-display');
 const totalAllowanceDisplay = document.getElementById('total-allowance-display');
@@ -37,18 +39,17 @@ const grandTotalDisplay = document.getElementById('grand-total-display');
 // --- State Variables ---
 let currentMonth = new Date().getMonth();
 let currentYear = new Date().getFullYear();
-let selectedDate = null; // วันที่ที่เลือกในปฏิทิน
-let loggedInUser = null; // เก็บข้อมูลผู้ใช้ที่ล็อกอิน { id, username }
-let dailyEarningsData = {}; // เก็บข้อมูลค่าแรงรายวันของเดือนที่กำลังแสดงผล { 'YYYY-MM-DD': { daily_wage, overtime_pay, allowance } }
-
+let selectedDate = null;
+let loggedInUser = null; // จะเก็บ { id, username } ของผู้ใช้ที่ล็อกอิน
+let dailyEarningsData = {}; // เก็บข้อมูลค่าแรงรายวันของเดือนที่ดึงมา
 
 // --- Functions ---
 
-// ฟังก์ชันสำหรับ Login
+// Event Listener สำหรับฟอร์ม Login
 loginForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const password = passwordInput.value; // **หมายเหตุ: ในตัวอย่าง Back-end คุณใช้ username ด้วย ควรรับมาใน Front-end ด้วย**
-    const username = "admin"; // **ตอนนี้ใช้ Hardcode ไปก่อน แต่ในระบบจริงต้องมีช่องให้กรอก username**
+    e.preventDefault(); // ป้องกันการรีโหลดหน้าเว็บ
+    const username = usernameInput.value;
+    const password = passwordInput.value;
 
     try {
         const response = await fetch(`${API_BASE_URL}/login`, {
@@ -56,7 +57,7 @@ loginForm.addEventListener('submit', async (e) => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ username, password }) // ส่ง username และ password ไป
+            body: JSON.stringify({ username, password })
         });
 
         const data = await response.json();
@@ -64,14 +65,13 @@ loginForm.addEventListener('submit', async (e) => {
         if (response.ok) {
             loginMessage.textContent = 'Login successful!';
             loginMessage.style.color = 'green';
-            loggedInUser = data.user; // เก็บข้อมูลผู้ใช้
-            localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser)); // เก็บลง Local Storage
-            
-            // ซ่อน Login, แสดง Calendar
-            loginSection.style.display = 'none';
-            calendarSection.style.display = 'block';
-            loggedInUserDisplay.textContent = `เข้าสู่ระบบโดย: ${loggedInUser.username}`; // แสดงชื่อผู้ใช้
-            renderCalendar(); // แสดงปฏิทิน
+            loggedInUser = data.user; // เก็บข้อมูลผู้ใช้ที่ล็อกอิน (id, username)
+            localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser)); // บันทึกใน Local Storage
+
+            loginSection.style.display = 'none'; // ซ่อนส่วน Login
+            calendarSection.style.display = 'block'; // แสดงส่วนปฏิทิน
+            loggedInUserDisplay.textContent = `เข้าสู่ระบบโดย: ${loggedInUser.username}`;
+            renderCalendar(); // เริ่มต้นสร้างปฏิทิน
         } else {
             loginMessage.textContent = data.message || 'Login failed.';
             loginMessage.style.color = 'red';
@@ -83,37 +83,38 @@ loginForm.addEventListener('submit', async (e) => {
     }
 });
 
-// ฟังก์ชันสำหรับ Logout
+// Event Listener สำหรับปุ่ม Logout
 logoutButton.addEventListener('click', () => {
     loggedInUser = null;
-    localStorage.removeItem('loggedInUser');
-    loginSection.style.display = 'block';
-    calendarSection.style.display = 'none';
-    passwordInput.value = ''; // เคลียร์รหัสผ่าน
+    localStorage.removeItem('loggedInUser'); // ลบข้อมูลผู้ใช้จาก Local Storage
+    loginSection.style.display = 'block'; // แสดงส่วน Login
+    calendarSection.style.display = 'none'; // ซ่อนส่วนปฏิทิน
+    usernameInput.value = ''; // เคลียร์ input
+    passwordInput.value = '';
     loginMessage.textContent = '';
 });
 
-// ฟังก์ชันสำหรับดึงข้อมูลค่าแรงรายวันของเดือนที่เลือก
+// ดึงข้อมูลค่าแรงรายวันสำหรับเดือนปัจจุบันจาก Back-end
 async function fetchDailyEarnings() {
     if (!loggedInUser) return;
     try {
-        const response = await fetch(`${API_BASE_URL}/api/daily-earnings/${loggedInUser.id}/${currentYear}/${currentMonth + 1}`); // +1 เพราะเดือนใน JS เริ่มจาก 0
+        const response = await fetch(`${API_BASE_URL}/api/daily-earnings/${loggedInUser.id}/${currentYear}/${currentMonth + 1}`);
         if (!response.ok) {
             throw new Error('Failed to fetch daily earnings');
         }
         const data = await response.json();
-        dailyEarningsData = {}; // เคลียร์ข้อมูลเดิม
+        dailyEarningsData = {}; // เคลียร์ข้อมูลเก่า
         data.forEach(item => {
-            const dateKey = item.record_date.split('T')[0]; // แปลงให้เป็น YYYY-MM-DD
+            const dateKey = item.record_date.split('T')[0]; // แปลงวันที่ให้อยู่ในรูปแบบ YYYY-MM-DD
             dailyEarningsData[dateKey] = item;
         });
     } catch (error) {
         console.error('Error fetching daily earnings:', error);
-        dailyEarningsData = {}; // หากมีข้อผิดพลาด ให้เคลียร์ข้อมูล
+        dailyEarningsData = {}; // ถ้ามี error ให้เคลียร์ข้อมูล
     }
 }
 
-// ฟังก์ชันสำหรับดึงยอดรวมรายเดือน
+// ดึงยอดรวมค่าแรงรายเดือนจาก Back-end (ตามรอบตัดยอด 21-20)
 async function fetchMonthlySummary() {
     if (!loggedInUser) return;
     try {
@@ -122,12 +123,14 @@ async function fetchMonthlySummary() {
             throw new Error('Failed to fetch monthly summary');
         }
         const summary = await response.json();
-        totalWageDisplay.textContent = summary.total_wage.toLocaleString('th-TH');
-        totalOvertimeDisplay.textContent = summary.total_overtime.toLocaleString('th-TH');
-        totalAllowanceDisplay.textContent = summary.total_allowance.toLocaleString('th-TH');
-        grandTotalDisplay.textContent = summary.grand_total.toLocaleString('th-TH');
+        // แสดงผลยอดรวมในหน้าเว็บ
+        totalWageDisplay.textContent = parseFloat(summary.total_wage || 0).toLocaleString('th-TH');
+        totalOvertimeDisplay.textContent = parseFloat(summary.total_overtime || 0).toLocaleString('th-TH');
+        totalAllowanceDisplay.textContent = parseFloat(summary.total_allowance || 0).toLocaleString('th-TH');
+        grandTotalDisplay.textContent = parseFloat(summary.grand_total || 0).toLocaleString('th-TH');
     } catch (error) {
         console.error('Error fetching monthly summary:', error);
+        // ถ้ามี error ให้แสดงเป็น 0
         totalWageDisplay.textContent = '0';
         totalOvertimeDisplay.textContent = '0';
         totalAllowanceDisplay.textContent = '0';
@@ -135,16 +138,16 @@ async function fetchMonthlySummary() {
     }
 }
 
-
-// ฟังก์ชันสำหรับแสดงปฏิทิน
+// ฟังก์ชันสร้างปฏิทิน
 async function renderCalendar() {
+    // แสดงเดือนและปีปัจจุบัน
     currentMonthYearHeader.textContent = new Date(currentYear, currentMonth).toLocaleString('th-TH', { month: 'long', year: 'numeric' });
-    calendarGrid.innerHTML = ''; // Clear previous days
+    calendarGrid.innerHTML = ''; // ล้างปฏิทินเก่า
 
-    const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay(); // 0 for Sunday, 1 for Monday
-    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+    const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay(); // วันแรกของเดือน (0=อาทิตย์, 1=จันทร์, ...)
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate(); // จำนวนวันในเดือน
 
-    // Days of the week header
+    // เพิ่มหัวตารางวัน (อา, จ, อ,...)
     const daysOfWeek = ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'];
     daysOfWeek.forEach(day => {
         const dayHeader = document.createElement('div');
@@ -153,66 +156,69 @@ async function renderCalendar() {
         calendarGrid.appendChild(dayHeader);
     });
 
-    // Fetch data before rendering days
+    // ดึงข้อมูลค่าแรงและยอดรวมมาก่อนที่จะสร้างเซลล์ปฏิทิน
     await fetchDailyEarnings();
-    await fetchMonthlySummary(); // ดึงยอดรวมมาแสดงด้วย
+    await fetchMonthlySummary();
 
-    // Empty cells for the first days of the week
+    // สร้างเซลล์ว่างสำหรับวันก่อนหน้าวันแรกของเดือน
     for (let i = 0; i < firstDayOfMonth; i++) {
         const emptyCell = document.createElement('div');
         emptyCell.classList.add('day', 'empty');
         calendarGrid.appendChild(emptyCell);
     }
 
-    // Render days of the month
+    // สร้างเซลล์สำหรับแต่ละวันในเดือน
     for (let day = 1; day <= daysInMonth; day++) {
         const date = new Date(currentYear, currentMonth, day);
-        const dateKey = date.toISOString().split('T')[0]; // Format YYYY-MM-DD
+        const dateKey = date.toISOString().split('T')[0]; // YYYY-MM-DD format
 
         const dayCell = document.createElement('div');
         dayCell.classList.add('day');
         dayCell.innerHTML = `<span class="date-number">${day}</span>`;
 
-        // Check if there are earnings for this day
+        // ถ้ามีข้อมูลค่าแรงสำหรับวันนี้ ให้แสดงในเซลล์
         if (dailyEarningsData[dateKey]) {
             const earnings = dailyEarningsData[dateKey];
             const earningsDiv = document.createElement('div');
             earningsDiv.classList.add('earnings-summary');
-            earningsDiv.innerHTML += `<small>ค่าแรง: ${earnings.daily_wage || 0}</small><br>`;
-            earningsDiv.innerHTML += `<small>โอที: ${earnings.overtime_pay || 0}</small><br>`;
-            earningsDiv.innerHTML += `<small>เบี้ยเลี้ยง: ${earnings.allowance || 0}</small>`;
+            earningsDiv.innerHTML += `<small>ค่าแรง: ${parseFloat(earnings.daily_wage || 0).toLocaleString('th-TH')}</small><br>`;
+            earningsDiv.innerHTML += `<small>โอที: ${parseFloat(earnings.overtime_pay || 0).toLocaleString('th-TH')}</small><br>`;
+            earningsDiv.innerHTML += `<small>เบี้ยเลี้ยง: ${parseFloat(earnings.allowance || 0).toLocaleString('th-TH')}</small>`;
             dayCell.appendChild(earningsDiv);
-            dayCell.classList.add('has-data'); // เพิ่มคลาสเพื่อใช้ CSS เน้น
+            dayCell.classList.add('has-data'); // เพิ่ม class เพื่อจัด style
         }
 
-        // Highlight current day
+        // ไฮไลท์วันปัจจุบัน
         if (date.toDateString() === new Date().toDateString()) {
             dayCell.classList.add('current-day');
         }
 
+        // เพิ่ม Event Listener สำหรับเปิด Modal เมื่อคลิกที่วัน
         dayCell.addEventListener('click', () => openEarningsModal(date));
         calendarGrid.appendChild(dayCell);
     }
 }
 
-// Function to open the earnings modal
+// ฟังก์ชันเปิด Modal สำหรับบันทึก/แก้ไขค่าแรง
 function openEarningsModal(date) {
     selectedDate = date;
     modalDateDisplay.textContent = selectedDate.toLocaleDateString('th-TH', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
     
-    // เคลียร์ค่าในช่อง input และแสดงข้อมูลที่มีอยู่
     const dateKey = selectedDate.toISOString().split('T')[0];
     const existingEarnings = dailyEarningsData[dateKey];
 
+    // แสดงข้อมูลค่าแรงที่มีอยู่ (ถ้ามี) ใน Modal
     if (existingEarnings) {
-        displayDailyWage.textContent = existingEarnings.daily_wage || 0;
-        displayOvertimePay.textContent = existingEarnings.overtime_pay || 0;
-        displayAllowance.textContent = existingEarnings.allowance || 0;
+        displayDailyWage.textContent = parseFloat(existingEarnings.daily_wage || 0).toLocaleString('th-TH');
+        displayOvertimePay.textContent = parseFloat(existingEarnings.overtime_pay || 0).toLocaleString('th-TH');
+        displayAllowance.textContent = parseFloat(existingEarnings.allowance || 0).toLocaleString('th-TH');
         
-        inputDailyWage.value = existingEarnings.daily_wage || 0;
-        inputOvertimePay.value = existingEarnings.overtime_pay || 0;
-        inputAllowance.value = existingEarnings.allowance || 0;
+        // กำหนดค่าใน input fields ด้วยข้อมูลที่มีอยู่
+        inputDailyWage.value = parseFloat(existingEarnings.daily_wage || 0);
+        inputOvertimePay.value = parseFloat(existingEarnings.overtime_pay || 0);
+        inputAllowance.value = parseFloat(existingEarnings.allowance || 0);
     } else {
+        // ถ้าไม่มีข้อมูล ให้แสดงเป็น 0 และเคลียร์ input fields
         displayDailyWage.textContent = '0';
         displayOvertimePay.textContent = '0';
         displayAllowance.textContent = '0';
@@ -222,19 +228,19 @@ function openEarningsModal(date) {
         inputAllowance.value = '0';
     }
 
-    noteModal.style.display = 'block';
+    noteModal.style.display = 'block'; // แสดง Modal
 }
 
-// Function to close the earnings modal
+// Event Listener สำหรับปุ่มปิด Modal
 closeModalButton.addEventListener('click', () => {
-    noteModal.style.display = 'none';
+    noteModal.style.display = 'none'; // ซ่อน Modal
 });
 
-// Event listener for saving earnings
+// Event Listener สำหรับปุ่มบันทึกข้อมูลค่าแรง
 saveEarningsButton.addEventListener('click', async () => {
-    if (!selectedDate || !loggedInUser) return;
+    if (!selectedDate || !loggedInUser) return; // ตรวจสอบว่ามีวันที่เลือกและผู้ใช้ล็อกอินอยู่
 
-    const recordDate = selectedDate.toISOString().split('T')[0]; // YYYY-MM-DD
+    const recordDate = selectedDate.toISOString().split('T')[0]; // วันที่ในรูปแบบ YYYY-MM-DD
     const dailyWage = parseFloat(inputDailyWage.value) || 0;
     const overtimePay = parseFloat(inputOvertimePay.value) || 0;
     const allowance = parseFloat(inputAllowance.value) || 0;
@@ -256,8 +262,8 @@ saveEarningsButton.addEventListener('click', async () => {
 
         if (response.ok) {
             alert('บันทึกข้อมูลค่าแรงสำเร็จ!');
-            noteModal.style.display = 'none';
-            renderCalendar(); // Re-render calendar to show updated data
+            noteModal.style.display = 'none'; // ปิด Modal
+            renderCalendar(); // รีเรนเดอร์ปฏิทินเพื่อแสดงข้อมูลใหม่
         } else {
             const errorData = await response.json();
             alert('บันทึกข้อมูลค่าแรงไม่สำเร็จ: ' + (errorData.message || 'Unknown error'));
@@ -265,40 +271,41 @@ saveEarningsButton.addEventListener('click', async () => {
     } catch (error) {
         console.error('Error saving earnings:', error);
         alert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์');
+        noteModal.style.display = 'none'; // ปิด modal แม้เกิด error
     }
 });
 
-
-// Navigation buttons
+// Event Listener สำหรับปุ่มเดือนก่อนหน้า
 prevMonthButton.addEventListener('click', () => {
     currentMonth--;
-    if (currentMonth < 0) {
+    if (currentMonth < 0) { // ถ้าเป็นเดือนก่อนหน้าเดือนมกราคม ให้ย้ายไปปีที่แล้ว
         currentMonth = 11;
         currentYear--;
     }
-    renderCalendar();
+    renderCalendar(); // สร้างปฏิทินใหม่
 });
 
+// Event Listener สำหรับปุ่มเดือนถัดไป
 nextMonthButton.addEventListener('click', () => {
     currentMonth++;
-    if (currentMonth > 11) {
+    if (currentMonth > 11) { // ถ้าเป็นเดือนถัดไปเดือนธันวาคม ให้ย้ายไปปีหน้า
         currentMonth = 0;
         currentYear++;
     }
-    renderCalendar();
+    renderCalendar(); // สร้างปฏิทินใหม่
 });
 
-// Initial load check
+// เมื่อโหลดหน้าเว็บเสร็จ
 document.addEventListener('DOMContentLoaded', () => {
     const storedUser = localStorage.getItem('loggedInUser');
     if (storedUser) {
-        loggedInUser = JSON.parse(storedUser);
-        loginSection.style.display = 'none';
-        calendarSection.style.display = 'block';
+        loggedInUser = JSON.parse(storedUser); // ดึงข้อมูลผู้ใช้จาก Local Storage
+        loginSection.style.display = 'none'; // ซ่อนส่วน Login
+        calendarSection.style.display = 'block'; // แสดงส่วนปฏิทิน
         loggedInUserDisplay.textContent = `เข้าสู่ระบบโดย: ${loggedInUser.username}`;
-        renderCalendar();
+        renderCalendar(); // สร้างปฏิทิน
     } else {
-        loginSection.style.display = 'block';
-        calendarSection.style.display = 'none';
+        loginSection.style.display = 'block'; // แสดงส่วน Login
+        calendarSection.style.display = 'none'; // ซ่อนส่วนปฏิทิน
     }
 });

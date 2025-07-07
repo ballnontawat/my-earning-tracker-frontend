@@ -1,51 +1,35 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ปฏิทินส่วนตัวของฉัน</title>
-    <link rel="stylesheet" href="style.css?v=202507071437"> 
-</head>
-<body>
-    <div id="app">
-        <div id="login-section">
-            <h2>เข้าสู่ระบบปฏิทิน</h2>
-            <form id="login-form">
-                <label for="password">รหัสผ่าน:</label>
-                <input type="password" id="password" name="password" required>
-                <button type="submit">เข้าสู่ระบบ</button>
-                <p id="login-message" class="error-message"></p>
-            </form>
+<div id="note-modal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close-button" id="close-modal">&times;</span>
+        <h3 id="modal-date"></h3>
+        
+        <h4>ข้อมูลค่าแรงสำหรับวันนี้:</h4>
+        <div id="existing-earnings-container">
+            <p>ค่าแรงรายวัน: <span id="display-daily-wage">0</span> บาท</p>
+            <p>ค่าโอที: <span id="display-overtime-pay">0</span> บาท</p>
+            <p>เบี้ยเลี้ยง: <span id="display-allowance">0</span> บาท</p>
         </div>
 
-        <div id="calendar-section" style="display: none;">
-            <div class="header">
-                <button id="prev-month">&lt; เดือนก่อนหน้า</button>
-                <h1 id="current-month-year"></h1>
-                <button id="next-month">เดือนถัดไป &gt;</button>
-            </div>
-            <p id="logged-in-user" class="user-display"></p>
-            <div class="calendar-grid">
-            </div>
-            <button id="logout-button">ออกจากระบบ</button>
-        </div>
-
-        <div id="note-modal" class="modal" style="display: none;">
-            <div class="modal-content">
-                <span class="close-button" id="close-modal">&times;</span>
-                <h3 id="modal-date"></h3>
-                
-                <h4>โน้ตที่มีอยู่:</h4>
-                <div id="existing-notes-container">
-                </div>
-
-                <h4>เพิ่มโน้ตใหม่:</h4>
-                <textarea id="new-note-text" placeholder="พิมพ์โน้ตของคุณที่นี่..."></textarea>
-                <button id="add-new-note-button">เพิ่มโน้ต</button>
-            </div>
-        </div>
+        <h4>บันทึก/แก้ไขค่าแรง:</h4>
+        <label for="input-daily-wage">ค่าแรงรายวัน:</label>
+        <input type="number" id="input-daily-wage" value="0" min="0">
+        
+        <label for="input-overtime-pay">ค่าโอที:</label>
+        <input type="number" id="input-overtime-pay" value="0" min="0">
+        
+        <label for="input-allowance">เบี้ยเลี้ยง:</label>
+        <input type="number" id="input-allowance" value="0" min="0">
+        
+        <button id="save-earnings-button">บันทึกข้อมูล</button>
     </div>
+</div>
 
-    <script src="script.js"></script>
-</body>
-</html>
+<div id="calendar-section" style="display: none;">
+    <div class="summary-section">
+        <h3>ยอดรวมรายเดือน (ตัดรอบ 21 - 20)</h3>
+        <p>รวมค่าแรง: <span id="total-wage-display">0</span> บาท</p>
+        <p>รวมค่าโอที: <span id="total-overtime-display">0</span> บาท</p>
+        <p>รวมเบี้ยเลี้ยง: <span id="total-allowance-display">0</span> บาท</p>
+        <p class="grand-total">ยอดรวมทั้งหมด: <span id="grand-total-display">0</span> บาท</p>
+    </div>
+    </div>

@@ -446,3 +446,201 @@ body {
         font-size: 0.9rem;
     }
 }
+/* --- ส่วนสำหรับแสดงยอดรวมรายเดือน (Monthly Summary Section) --- */
+.summary-section {
+    background-color: #e9f7ef; /* สีเขียวอ่อนๆ ดูสบายตา */
+    border: 1px solid #c8e6c9;
+    padding: 20px;
+    margin: 25px 0;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.summary-section h3 {
+    margin-top: 0;
+    color: #28a745; /* สีเขียวเข้ม */
+    font-size: 1.5em;
+    border-bottom: 2px solid #28a745;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.summary-section p {
+    margin: 8px 0;
+    font-size: 1.1em;
+    color: #555;
+}
+
+.summary-section p strong {
+    color: #333;
+}
+
+.summary-section .grand-total {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #007bff; /* สีน้ำเงินสำหรับยอดรวมทั้งหมด */
+    margin-top: 20px;
+    padding-top: 10px;
+    border-top: 1px dashed #ccc;
+}
+
+/* --- การจัดรูปแบบเซลล์ปฏิทินที่มีข้อมูล (Days with Earnings Data) --- */
+.calendar-grid .day {
+    min-height: 100px; /* เพิ่มความสูงขั้นต่ำเพื่อให้มีพื้นที่แสดงข้อมูล */
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* จัดเรียงเนื้อหาจากด้านบน */
+    align-items: flex-start; /* จัดเรียงเนื้อหาจากซ้าย */
+    border: 1px solid #eee;
+    border-radius: 5px;
+    background-color: #fff;
+    position: relative; /* เพื่อให้สามารถจัดตำแหน่งองค์ประกอบภายในได้ */
+}
+
+.calendar-grid .day .date-number {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.calendar-grid .day.current-day {
+    border: 2px solid #007bff;
+    background-color: #eaf6ff;
+}
+
+.calendar-grid .day.has-data {
+    background-color: #d9edf7; /* สีฟ้าอ่อน */
+    border: 1px solid #bce8f1;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.calendar-grid .day.has-data:hover {
+    background-color: #c4e4f7; /* สีฟ้าเข้มขึ้นเมื่อเมาส์ชี้ */
+}
+
+.calendar-grid .day.has-data .earnings-summary {
+    font-size: 0.85em; /* ขนาดตัวอักษรของข้อมูลค่าแรงในเซลล์ */
+    line-height: 1.4;
+    margin-top: 5px;
+    color: #31708f; /* สีน้ำเงินเข้มปานกลาง */
+    width: 100%; /* ให้ข้อมูลเต็มความกว้างของเซลล์ */
+    white-space: normal; /* อนุญาตให้ข้อความขึ้นบรรทัดใหม่ */
+    word-break: break-word; /* ให้ข้อความตัดคำได้หากยาวเกินไป */
+}
+
+.calendar-grid .day.has-data .earnings-summary small {
+    display: block; /* ทำให้แต่ละบรรทัดแยกกัน */
+    font-weight: 500;
+}
+
+
+/* --- การจัดรูปแบบ Modal (Pop-up Window) สำหรับบันทึกค่าแรง --- */
+#note-modal .modal-content {
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    max-width: 500px; /* กำหนดความกว้างสูงสุดของ Modal */
+    width: 90%; /* ให้ Modal ปรับตามขนาดหน้าจอ */
+}
+
+#note-modal .modal-content h3 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+    text-align: center;
+}
+
+#note-modal .modal-content h4 {
+    color: #555;
+    margin-top: 25px;
+    margin-bottom: 10px;
+    font-size: 1.3em;
+    border-bottom: 1px dashed #eee;
+    padding-bottom: 5px;
+}
+
+#existing-earnings-container {
+    background-color: #f0f0f0;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+#existing-earnings-container p {
+    margin: 8px 0;
+    font-size: 1.05em;
+    color: #444;
+}
+
+#existing-earnings-container p span {
+    font-weight: bold;
+    color: #0056b3; /* สีน้ำเงินเข้มสำหรับตัวเลขค่าแรง */
+}
+
+#note-modal .modal-content label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
+    font-size: 1.1em;
+}
+
+#note-modal .modal-content input[type="number"] {
+    width: calc(100% - 20px); /* ลบ padding เพื่อให้เต็มพื้นที่ */
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1em;
+    box-sizing: border-box; /* สำคัญ: ให้ padding และ border รวมอยู่ใน width */
+}
+
+#note-modal .modal-content input[type="number"]:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+    outline: none;
+}
+
+#note-modal .modal-content button {
+    display: block;
+    width: 100%;
+    padding: 12px 20px;
+    background-color: #28a745; /* สีเขียวสำหรับปุ่มบันทึก */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.2em;
+    cursor: pointer;
+    margin-top: 25px;
+    transition: background-color 0.3s ease;
+}
+
+#note-modal .modal-content button:hover {
+    background-color: #218838; /* สีเขียวเข้มขึ้นเมื่อเมาส์ชี้ */
+}
+
+/* responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+    .summary-section, .modal-content {
+        margin-left: 10px;
+        margin-right: 10px;
+        padding: 15px;
+    }
+
+    .summary-section h3 {
+        font-size: 1.3em;
+    }
+
+    .summary-section .grand-total {
+        font-size: 1.6em;
+    }
+    
+    #note-modal .modal-content h3 {
+        font-size: 1.5em;
+    }
+}

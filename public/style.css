@@ -268,3 +268,76 @@ body {
     text-align: center;
 }
 /* Removed empty .modal-content h4 {} ruleset */
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) { /* สำหรับแท็บเล็ตและอุปกรณ์ขนาดเล็กกว่า */
+    #app {
+        margin: 10px; /* ลดระยะขอบด้านนอก */
+        padding: 10px; /* ลดระยะขอบด้านใน */
+        box-shadow: none; /* ลบเงากล่อง */
+        border-radius: 0; /* ลบขอบมน */
+    }
+
+    .header {
+        flex-direction: column; /* จัดเรียงเดือน/ปีและปุ่มเป็นแนวตั้ง */
+        gap: 10px; /* ระยะห่างระหว่างองค์ประกอบที่ซ้อนกัน */
+        margin-bottom: 15px;
+    }
+
+    #current-month-year {
+        font-size: 1.5rem; /* ขนาดตัวอักษรสำหรับเดือน/ปีที่เล็กลง */
+    }
+
+    .header button {
+        width: 100%; /* ทำให้ปุ่มเต็มความกว้าง */
+        padding: 10px;
+    }
+
+    .calendar-grid {
+        gap: 2px; /* ลดระยะห่างระหว่างเซลล์ */
+        padding: 2px; /* ลดระยะข่างในคอนเทนเนอร์กริด */
+    }
+
+    .day-name {
+        display: none; /* ซ่อนชื่อวันด้านบนสำหรับหน้าจอขนาดเล็ก */
+    }
+
+    .day-cell {
+        min-height: 80px; /* ความสูงขั้นต่ำของเซลล์วันที่เล็กลง */
+        padding: 5px; /* ลดระยะขอบด้านในเซลล์ */
+        font-size: 0.9em; /* ขนาดตัวอักษรสำหรับเนื้อหาเซลล์ที่เล็กลง */
+    }
+
+    .day-number {
+        font-size: 1em; /* ขนาดตัวอักษรสำหรับตัวเลขวันที่เล็กลง */
+        margin-bottom: 2px;
+    }
+
+    .day-note {
+        font-size: 0.7em; /* ขนาดตัวอักษรสำหรับโน้ตที่เล็กลง */
+        padding: 0 2px;
+    }
+
+    .day-name-in-cell {
+        display: block; /* แสดงชื่อวันภายในเซลล์สำหรับหน้าจอขนาดเล็ก */
+    }
+
+    .modal-content {
+        width: 95%; /* ทำให้ Modal กว้างขึ้นบนหน้าจอขนาดเล็ก */
+        padding: 15px;
+    }
+
+    #login-section {
+        padding: 20px;
+    }
+
+    #login-form input[type="password"] {
+        width: 90%; /* ทำให้ Input กว้างขึ้น */
+    }
+}
+
+@media (max-width: 480px) { /* สำหรับหน้าจอที่เล็กกว่า (เช่น โทรศัพท์รุ่นเก่า) */
+    .day-cell {
+        min-height: 70px; /* ปรับความสูงขั้นต่ำเพิ่มเติม */
+    }
+}

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ปฏิทินส่วนตัวของฉัน</title>
     <link rel="stylesheet" href="style.css">
-</head>
+    </head>
 <body>
     <div id="app">
         <div id="login-section">
@@ -24,29 +24,23 @@
                 <h1 id="current-month-year"></h1>
                 <button id="next-month">เดือนถัดไป &gt;</button>
             </div>
-            <!-- Added a span to display the logged-in user's name -->
-            <p id="logged-in-user" class="text-lg font-semibold text-gray-700 mb-4"></p>
-            <div class="calendar-grid">
-                <!-- Day names will be inserted here by JavaScript or can be hardcoded -->
-                <div class="day-name">อาทิตย์</div>
-                <div class="day-name">จันทร์</div>
-                <div class="day-name">อังคาร</div>
-                <div class="day-name">พุธ</div>
-                <div class="day-name">พฤหัสบดี</div>
-                <div class="day-name">ศุกร์</div>
-                <div class="day-name">เสาร์</div>
-                <!-- Calendar days will be inserted here by JavaScript -->
-            </div>
+            <p id="logged-in-user" class="user-display"></p> <div class="calendar-grid">
+                </div>
             <button id="logout-button">ออกจากระบบ</button>
         </div>
 
         <div id="note-modal" class="modal" style="display: none;">
             <div class="modal-content">
-                <span class="close-button">&times;</span>
+                <span class="close-button" id="close-modal">&times;</span>
                 <h3 id="modal-date"></h3>
-                <textarea id="note-text" placeholder="พิมพ์บันทึกของคุณที่นี่..."></textarea>
-                <button id="save-note-button">บันทึก</button>
-                <button id="delete-note-button" style="display: none;">ลบโน้ต</button>
+                
+                <h4>โน้ตที่มีอยู่:</h4>
+                <div id="existing-notes-container">
+                    </div>
+
+                <h4>เพิ่มโน้ตใหม่:</h4>
+                <textarea id="new-note-text" placeholder="พิมพ์โน้ตของคุณที่นี่..."></textarea>
+                <button id="add-new-note-button">เพิ่มโน้ต</button>
             </div>
         </div>
     </div>

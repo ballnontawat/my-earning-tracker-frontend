@@ -325,3 +325,67 @@ body {
 .calendar-grid {
     grid-auto-rows: minmax(100px, auto);
 }
+/* style.css (แก้ไข/เพิ่มโค้ดในไฟล์นี้) */
+
+/* ... (โค้ด CSS ส่วนต้นของคุณ) ... */
+
+#app {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    /* *** สำคัญ: เพิ่ม max-width เพื่อให้ปฏิทินมีพื้นที่ด้านข้างมากขึ้น *** */
+    /* จากเดิม max-width: 500px; */
+    max-width: 900px; /* ลองปรับเป็น 900px หรือ 1000px เพื่อให้ปฏิทินกว้างขึ้น */
+                      /* คุณสามารถลองค่าต่างๆ เพื่อดูผลลัพธ์ที่เหมาะสมกับจอภาพของคุณ */
+    text-align: center;
+    box-sizing: border-box;
+}
+
+/* ... (โค้ด CSS สำหรับ Login Section) ... */
+
+
+/* --- แก้ไขสำหรับ Calendar Section --- */
+
+.calendar-grid {
+    display: grid;
+    /* grid-template-columns: repeat(7, 1fr); */ /* เดิม 7 columns for days of the week */
+    /* ไม่ต้องแก้ไขส่วนนี้ก็ได้ เพราะ 1fr จะทำให้แต่ละช่องกว้างเท่ากันและใช้พื้นที่ที่มีทั้งหมด */
+    /* แต่ถ้าต้องการให้กว้างขึ้นจริงๆ ต้องไปเพิ่มพื้นที่ให้ parent container (#app) */
+
+    /* **ยังคงใช้ grid-auto-rows เพื่อให้แต่ละแถวขยายความสูงได้ตามเนื้อหา** */
+    grid-auto-rows: minmax(100px, auto); /* หรือ minmax(120px, auto); ถ้าต้องการ min-height ที่สูงขึ้น */
+    gap: 5px;
+    margin-bottom: 20px;
+}
+
+.day-cell {
+    /* ... (โค้ดเดิมของคุณ) ... */
+    /* ไม่ต้องปรับความกว้างที่นี่โดยตรง เพราะ Grid จะจัดการให้ */
+    /* min-height อาจยังคง 100px-120px หรือมากกว่า เพื่อรองรับข้อความหลายบรรทัด */
+    min-height: 120px; /* เพิ่ม min-height ของแต่ละเซลล์เพื่อให้มีพื้นที่รองรับข้อความเมื่อมันไม่กว้างพอ */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    overflow: visible; /* ให้เนื้อหาขยายได้ */
+}
+
+.day-note {
+    font-size: 0.8rem; /* หากข้อความยังยาวไป ให้ลองลดขนาดฟอนต์ตรงนี้อีกนิดได้ (เช่น 0.75rem) */
+    text-align: left;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    padding: 0 5px;
+    margin-top: 2px;
+    width: 100%; /* สำคัญ: ให้ day-note ใช้ความกว้างทั้งหมดของ day-cell */
+    box-sizing: border-box;
+
+    white-space: normal;    /* อนุญาตให้ขึ้นบรรทัดใหม่ */
+    max-height: none;       /* ไม่จำกัดความสูง */
+    overflow: visible;      /* ไม่ซ่อนเนื้อหา */
+    text-overflow: clip;    /* ไม่แสดง ... */
+}
+
+/* ... (โค้ด CSS ส่วนท้ายของคุณ) ... */

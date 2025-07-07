@@ -1,4 +1,4 @@
-/* style.css */
+/* public/style.css */
 
 /* Base styles for the entire page */
 body {
@@ -18,7 +18,7 @@ body {
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 500px; /* Maximum width for the app */
+    max-width: 900px; /* *** ปรับค่านี้สำหรับ Desktop: ทำให้ปฏิทินกว้างขึ้น *** */
     text-align: center;
     box-sizing: border-box; /* Include padding/border in width */
 }
@@ -106,7 +106,10 @@ body {
 
 .calendar-grid {
     display: grid;
-    grid-template-columns: repeat(7, 1fr); /* 7 columns for days of the week */
+    /* สำหรับ Desktop: 7 คอลัมน์ */
+    grid-template-columns: repeat(7, 1fr);
+    /* กำหนดความสูงขั้นต่ำ 120px และขยายอัตโนมัติตามเนื้อหา */
+    grid-auto-rows: minmax(120px, auto);
     gap: 5px;
     margin-bottom: 20px;
 }
@@ -121,20 +124,19 @@ body {
 }
 
 .day-cell {
-    /* Basic styles for each day cell in the calendar */
     padding: 15px 5px;
     border: 1px solid #ddd;
     border-radius: 5px;
-    min-height: 80px; /* Minimum height to accommodate content */
+    min-height: 120px; /* ค่า min-height สำหรับ Desktop */
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
+    justify-content: flex-start; /* จัดเนื้อหาเริ่มต้นจากด้านบน */
+    align-items: center; /* จัดเรียงเนื้อหาตรงกลางในแนวนอน */
     cursor: pointer;
     transition: background-color 0.2s ease, border-color 0.2s ease;
     font-size: 1rem;
     position: relative;
-    overflow: hidden; /* Hide overflowing content */
+    overflow: visible; /* *** สำคัญ: อนุญาตให้เนื้อหาภายในขยายออกไปได้ *** */
 }
 
 .day-cell:hover {
@@ -165,14 +167,18 @@ body {
 
 .day-note {
     font-size: 0.8rem;
-    text-align: center;
-    word-break: break-word; /* Wrap long words */
+    text-align: left; /* จัดชิดซ้ายเพื่อการอ่านที่ดีขึ้น */
+    word-break: break-word; /* *** สำคัญ: ทำให้คำที่ยาวมากๆ ตัดขึ้นบรรทัดใหม่ได้ *** */
+    overflow-wrap: break-word; /* ตัวนี้มีความเข้ากันได้ดีกว่า word-break */
     padding: 0 5px;
-    max-height: 40px; /* Limit height of note displayed in day cell */
-    overflow: hidden; /* Hide overflow if note is too long */
-    text-overflow: ellipsis; /* Show ... if text overflows */
-    white-space: nowrap; /* Prevent unnecessary line breaks */
-    margin-top: 2px; /* Small margin for spacing */
+    margin-top: 2px;
+    width: 100%; /* ให้ใช้ความกว้างที่มีอยู่ทั้งหมดของ day-cell */
+    box-sizing: border-box;
+
+    white-space: normal; /* *** สำคัญ: อนุญาตให้ข้อความขึ้นบรรทัดใหม่ได้ *** */
+    max-height: none;    /* *** สำคัญ: ลบการจำกัดความสูง *** */
+    overflow: visible;   /* *** สำคัญ: ทำให้เนื้อหาที่เกินมองเห็นได้ ไม่ถูกซ่อน *** */
+    text-overflow: clip; /* ไม่แสดง ... เมื่อข้อความขยายได้แล้ว */
 }
 
 /* User-specific note colors */
@@ -303,89 +309,62 @@ body {
 #delete-note-button:hover {
     background-color: #c82333;
 }
-/* style.css (ต่อท้ายไฟล์เดิม) */
 
-/* --- การแก้ไขสำหรับ Calendar Grid Balance และการแสดง Note เต็ม --- */
+/* --- Media Queries สำหรับ Mobile / จอขนาดเล็ก --- */
 
-.day-cell {
-    overflow: visible;
-    justify-content: flex-start;
+@media (max-width: 768px) { /* สำหรับหน้าจอที่มีความกว้างสูงสุด 768px (ทั่วไปสำหรับ Tablet/Mobile) */
+    #app {
+        padding: 15px; /* ลด padding ลงสำหรับจอเล็ก */
+        max-width: 95%; /* ให้ใช้ความกว้างเกือบเต็มหน้าจอมือถือ */
+    }
+
+    #calendar-section .header h1 {
+        font-size: 1.5rem; /* ลดขนาดหัวข้อลง */
+    }
+
+    .calendar-grid {
+        /* *** สำคัญ: เปลี่ยนเป็น 1 คอลัมน์สำหรับจอเล็ก เพื่อให้มีพื้นที่แนวนอนเยอะๆ *** */
+        grid-template-columns: 1fr;
+        gap: 10px; /* อาจจะเพิ่ม gap เล็กน้อยเพื่อให้ดูมีช่องว่าง */
+    }
+
+    .day-name {
+        display: none; /* ซ่อนชื่อวัน (จันทร์-อาทิตย์) เพื่อประหยัดพื้นที่บนมือถือ */
+    }
+
+    .day-cell {
+        min-height: 80px; /* ลด min-height ลงสำหรับจอเล็ก */
+        padding: 10px; /* ลด padding ของเซลล์ */
+        align-items: flex-start; /* จัดเนื้อหาชิดซ้ายบน */
+    }
+
+    .day-number {
+        font-size: 1em; /* ปรับขนาดตัวเลขวัน */
+        text-align: left; /* จัดชิดซ้าย */
+        margin-bottom: 0px; /* ลด margin */
+    }
+
+    .day-note {
+        font-size: 0.9rem; /* อาจจะเพิ่มขนาดฟอนต์ของโน้ตขึ้นเล็กน้อยบนมือถือ เพื่อให้อ่านง่าย */
+        padding: 0 0px; /* ลด padding ด้านข้าง */
+    }
 }
 
-.day-note {
-    white-space: normal;
-    max-height: none;
-    overflow: visible;
-    text-overflow: clip;
-    text-align: left;
-    word-break: break-word;
-    overflow-wrap: break-word;
+@media (max-width: 480px) { /* สำหรับหน้าจอโทรศัพท์มือถือที่เล็กมากๆ */
+    #app {
+        padding: 10px;
+    }
+    #calendar-section .header h1 {
+        font-size: 1.2rem;
+    }
+    #calendar-section .header button {
+        padding: 6px 10px;
+        font-size: 0.9rem;
+    }
+    .day-cell {
+        min-height: 70px;
+    }
+    .day-note {
+        font-size: 0.8rem;
+    }
 }
-
-.calendar-grid {
-    grid-auto-rows: minmax(100px, auto);
-}
-/* style.css (แก้ไข/เพิ่มโค้ดในไฟล์นี้) */
-
-/* ... (โค้ด CSS ส่วนต้นของคุณ) ... */
-
-#app {
-    background-color: #ffffff;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    /* *** สำคัญ: เพิ่ม max-width เพื่อให้ปฏิทินมีพื้นที่ด้านข้างมากขึ้น *** */
-    /* จากเดิม max-width: 500px; */
-    max-width: 900px; /* ลองปรับเป็น 900px หรือ 1000px เพื่อให้ปฏิทินกว้างขึ้น */
-                      /* คุณสามารถลองค่าต่างๆ เพื่อดูผลลัพธ์ที่เหมาะสมกับจอภาพของคุณ */
-    text-align: center;
-    box-sizing: border-box;
-}
-
-/* ... (โค้ด CSS สำหรับ Login Section) ... */
-
-
-/* --- แก้ไขสำหรับ Calendar Section --- */
-
-.calendar-grid {
-    display: grid;
-    /* grid-template-columns: repeat(7, 1fr); */ /* เดิม 7 columns for days of the week */
-    /* ไม่ต้องแก้ไขส่วนนี้ก็ได้ เพราะ 1fr จะทำให้แต่ละช่องกว้างเท่ากันและใช้พื้นที่ที่มีทั้งหมด */
-    /* แต่ถ้าต้องการให้กว้างขึ้นจริงๆ ต้องไปเพิ่มพื้นที่ให้ parent container (#app) */
-
-    /* **ยังคงใช้ grid-auto-rows เพื่อให้แต่ละแถวขยายความสูงได้ตามเนื้อหา** */
-    grid-auto-rows: minmax(100px, auto); /* หรือ minmax(120px, auto); ถ้าต้องการ min-height ที่สูงขึ้น */
-    gap: 5px;
-    margin-bottom: 20px;
-}
-
-.day-cell {
-    /* ... (โค้ดเดิมของคุณ) ... */
-    /* ไม่ต้องปรับความกว้างที่นี่โดยตรง เพราะ Grid จะจัดการให้ */
-    /* min-height อาจยังคง 100px-120px หรือมากกว่า เพื่อรองรับข้อความหลายบรรทัด */
-    min-height: 120px; /* เพิ่ม min-height ของแต่ละเซลล์เพื่อให้มีพื้นที่รองรับข้อความเมื่อมันไม่กว้างพอ */
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    overflow: visible; /* ให้เนื้อหาขยายได้ */
-}
-
-.day-note {
-    font-size: 0.8rem; /* หากข้อความยังยาวไป ให้ลองลดขนาดฟอนต์ตรงนี้อีกนิดได้ (เช่น 0.75rem) */
-    text-align: left;
-    word-break: break-word;
-    overflow-wrap: break-word;
-    padding: 0 5px;
-    margin-top: 2px;
-    width: 100%; /* สำคัญ: ให้ day-note ใช้ความกว้างทั้งหมดของ day-cell */
-    box-sizing: border-box;
-
-    white-space: normal;    /* อนุญาตให้ขึ้นบรรทัดใหม่ */
-    max-height: none;       /* ไม่จำกัดความสูง */
-    overflow: visible;      /* ไม่ซ่อนเนื้อหา */
-    text-overflow: clip;    /* ไม่แสดง ... */
-}
-
-/* ... (โค้ด CSS ส่วนท้ายของคุณ) ... */

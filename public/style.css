@@ -18,7 +18,7 @@ body {
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 900px; /* *** ปรับค่านี้สำหรับ Desktop: ทำให้ปฏิทินกว้างขึ้น *** */
+    max-width: 900px; /* ปรับค่านี้สำหรับ Desktop: ทำให้ปฏิทินกว้างขึ้น */
     text-align: center;
     box-sizing: border-box; /* Include padding/border in width */
 }
@@ -129,14 +129,14 @@ body {
     border-radius: 5px;
     min-height: 120px; /* ค่า min-height สำหรับ Desktop */
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* จัดเรียงเนื้อหาในแนวตั้ง */
     justify-content: flex-start; /* จัดเนื้อหาเริ่มต้นจากด้านบน */
-    align-items: center; /* จัดเรียงเนื้อหาตรงกลางในแนวนอน */
+    align-items: flex-start; /* *** จัดเนื้อหาชิดซ้ายของเซลล์ (เพื่อให้ชื่อวันดูดีขึ้น) *** */
     cursor: pointer;
     transition: background-color 0.2s ease, border-color 0.2s ease;
     font-size: 1rem;
     position: relative;
-    overflow: visible; /* *** สำคัญ: อนุญาตให้เนื้อหาภายในขยายออกไปได้ *** */
+    overflow: visible; /* อนุญาตให้เนื้อหาภายในขยายออกไปได้ */
 }
 
 .day-cell:hover {
@@ -157,27 +157,41 @@ body {
 
 .day-number {
     font-weight: bold;
-    font-size: 1.1em;
-    margin-bottom: 5px;
-    width: 100%;
-    text-align: right;
-    padding-right: 5px;
+    font-size: 1.1em; /* ขนาดใหญ่กว่าปกติเล็กน้อย */
+    margin-bottom: 5px; /* ระยะห่างด้านล่างจากตัวเลข */
+    width: 100%;       /* ใช้ความกว้างเต็มที่ของช่อง */
+    text-align: right; /* จัดชิดขวาของช่อง */
+    padding-right: 5px; /* เว้นขอบด้านขวาเล็กน้อย */
     box-sizing: border-box;
+    display: block; /* ควรเป็น block-level เพื่อให้จัดบรรทัดได้ดี */
+    color: #333;    /* สีของตัวเลข */
+    order: 2; /* *** ให้ day-number อยู่หลังจาก day-name-in-cell ใน flexbox *** */
 }
+
+/* NEW: Style for the day name inside the cell */
+.day-name-in-cell {
+    display: none; /* *** โดยค่าเริ่มต้นให้ซ่อนไว้ (สำหรับ Desktop) *** */
+    font-size: 0.8em; /* ขนาดฟอนต์เล็กกว่าตัวเลขวัน */
+    color: #666; /* สีเทา */
+    margin-bottom: 2px; /* เว้นระยะห่างกับตัวเลขวัน */
+    padding-left: 5px; /* เว้นขอบซ้ายเล็กน้อย */
+    order: 1; /* *** ให้ day-name-in-cell อยู่ก่อน day-number ใน flexbox *** */
+}
+
 
 .day-note {
     font-size: 0.8rem;
     text-align: left; /* จัดชิดซ้ายเพื่อการอ่านที่ดีขึ้น */
-    word-break: break-word; /* *** สำคัญ: ทำให้คำที่ยาวมากๆ ตัดขึ้นบรรทัดใหม่ได้ *** */
+    word-break: break-word; /* ทำให้คำที่ยาวมากๆ ตัดขึ้นบรรทัดใหม่ได้ */
     overflow-wrap: break-word; /* ตัวนี้มีความเข้ากันได้ดีกว่า word-break */
     padding: 0 5px;
-    margin-top: 2px;
+    margin-top: 5px; /* *** เพิ่มระยะห่างด้านบนเล็กน้อยเพื่อให้แยกจากตัวเลขวัน/ชื่อวัน *** */
     width: 100%; /* ให้ใช้ความกว้างที่มีอยู่ทั้งหมดของ day-cell */
     box-sizing: border-box;
 
-    white-space: normal; /* *** สำคัญ: อนุญาตให้ข้อความขึ้นบรรทัดใหม่ได้ *** */
-    max-height: none;    /* *** สำคัญ: ลบการจำกัดความสูง *** */
-    overflow: visible;   /* *** สำคัญ: ทำให้เนื้อหาที่เกินมองเห็นได้ ไม่ถูกซ่อน *** */
+    white-space: normal; /* อนุญาตให้ข้อความขึ้นบรรทัดใหม่ได้ */
+    max-height: none;    /* ลบการจำกัดความสูง */
+    overflow: visible;   /* ทำให้เนื้อหาที่เกินมองเห็นได้ ไม่ถูกซ่อน */
     text-overflow: clip; /* ไม่แสดง ... เมื่อข้อความขยายได้แล้ว */
 }
 
@@ -323,30 +337,37 @@ body {
     }
 
     .calendar-grid {
-        /* *** สำคัญ: เปลี่ยนเป็น 1 คอลัมน์สำหรับจอเล็ก เพื่อให้มีพื้นที่แนวนอนเยอะๆ *** */
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr; /* เปลี่ยนเป็น 1 คอลัมน์สำหรับจอเล็ก */
         gap: 10px; /* อาจจะเพิ่ม gap เล็กน้อยเพื่อให้ดูมีช่องว่าง */
     }
 
     .day-name {
-        display: none; /* ซ่อนชื่อวัน (จันทร์-อาทิตย์) เพื่อประหยัดพื้นที่บนมือถือ */
+        display: none; /* *** ซ่อนแถวชื่อวันด้านบนในโหมดมือถือ *** */
     }
 
     .day-cell {
         min-height: 80px; /* ลด min-height ลงสำหรับจอเล็ก */
         padding: 10px; /* ลด padding ของเซลล์ */
-        align-items: flex-start; /* จัดเนื้อหาชิดซ้ายบน */
+        align-items: flex-start; /* ยืนยันว่าจัดเนื้อหาชิดซ้าย */
     }
 
     .day-number {
-        font-size: 1em; /* ปรับขนาดตัวเลขวัน */
-        text-align: left; /* จัดชิดซ้าย */
-        margin-bottom: 0px; /* ลด margin */
+        text-align: right; /* ตัวเลขวันยังคงจัดชิดขวาในเซลล์ */
+        font-size: 1.1em; /* ขนาดตัวเลขบนมือถือ */
+        margin-bottom: 0px; /* ลด margin ของตัวเลข */
+        padding-right: 5px; /* เว้นขอบด้านขวา */
+    }
+
+    /* NEW: On mobile, show the day name inside the cell */
+    .day-name-in-cell {
+        display: block; /* *** บนมือถือ: แสดงชื่อวันในช่อง *** */
+        font-size: 0.9em; /* อาจจะปรับขนาดฟอนต์ให้ใหญ่ขึ้นบนมือถือ */
+        padding-left: 5px; /* เว้นขอบซ้าย */
+        color: #007bff; /* อาจจะใช้สีที่เด่นขึ้นสำหรับชื่อวันบนมือถือ */
     }
 
     .day-note {
-        font-size: 0.9rem; /* อาจจะเพิ่มขนาดฟอนต์ของโน้ตขึ้นเล็กน้อยบนมือถือ เพื่อให้อ่านง่าย */
-        padding: 0 0px; /* ลด padding ด้านข้าง */
+        margin-top: 5px; /* ให้มีระยะห่างจากชื่อวัน/ตัวเลข */
     }
 }
 

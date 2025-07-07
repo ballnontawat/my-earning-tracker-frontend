@@ -9,7 +9,7 @@ const loginForm = document.getElementById('login-form');
 const passwordInput = document.getElementById('password');
 const loginMessage = document.getElementById('login-message');
 const currentMonthYear = document.getElementById('current-month-year');
-const loggedInUserSpan = document.getElementById('logged-in-user'); // New: Element to display logged-in user
+const loggedInUserSpan = document.getElementById('logged-in-user');
 const prevMonthButton = document.getElementById('prev-month');
 const nextMonthButton = document.getElementById('next-month');
 const calendarGrid = document.querySelector('.calendar-grid');
@@ -49,19 +49,20 @@ let currentMonth = new Date().getMonth(); // Current month (0-11)
 let currentYear = new Date().getFullYear(); // Current year
 let selectedDate = null; // Selected date for note taking
 
-// *** This is the API_BASE_URL that needs to be updated ***
-// URL ที่ถูกต้องควรเป็น https://my-calendar-backend-api.onrender.com/api
-const API_BASE_URL = 'https://my-calendar-backend-api.onrender.com/api'; // <--- บรรทัดนี้คือ URL ที่แก้ไขแล้ว!
+// *** API_BASE_URL ที่ถูกต้อง (ตามที่คุณเคยแจ้งไว้) ***
+const API_BASE_URL = 'https://my-calendar-backend-api.onrender.com/api';
 // ----------------------------------------------------
 
 let notes = {}; // Object to temporarily store notes (will be updated from API)
-let loggedInUser = null; // New: Stores the currently logged-in user's info { name, colorClass }
+let loggedInUser = null; // Stores the currently logged-in user's info { name, colorClass }
 
-// New: User configuration mapping passwords to user details
+// User configuration mapping passwords to user details
 const userConfig = {
-    'ball': { name: 'บอล', colorClass: 'note-ball', password: 'ball' }, // Added password to user config
-    'ram': { name: 'ราม', colorClass: 'note-ram', password: 'ram' } // Added password to user config
+    'ball': { name: 'บอล', colorClass: 'note-ball', password: 'ball' },
+    'ram': { name: 'ราม', colorClass: 'note-ram', password: 'ram' }
 };
+
+const thaiDayNames = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์']; // เพิ่ม array ชื่อวันภาษาไทย
 
 // ---------------------------
 // 3. Functions (ฟังก์ชันการทำงาน)
@@ -72,21 +73,21 @@ function showLogin() {
     loginSection.style.display = 'block';
     calendarSection.style.display = 'none';
     noteModal.style.display = 'none';
-    confirmModal.style.display = 'none'; // Hide confirm modal too
-    loggedInUser = null; // Clear logged-in user on logout
-    loggedInUserSpan.textContent = ''; // Clear user display
-    passwordInput.value = ''; // Clear password field
+    confirmModal.style.display = 'none';
+    loggedInUser = null;
+    loggedInUserSpan.textContent = '';
+    passwordInput.value = '';
 }
 
 function showCalendar() {
     loginSection.style.display = 'none';
     calendarSection.style.display = 'block';
     noteModal.style.display = 'none';
-    confirmModal.style.display = 'none'; // Hide confirm modal too
+    confirmModal.style.display = 'none';
     if (loggedInUser) {
-        loggedInUserSpan.textContent = `ผู้ใช้: ${loggedInUser.name}`; // Display logged-in user
+        loggedInUserSpan.textContent = `ผู้ใช้: ${loggedInUser.name}`;
     }
-    renderCalendar(); // Render the calendar when showing the calendar section
+    renderCalendar();
 }
 
 // Function to render the calendar and fetch notes from the Backend
@@ -98,11 +99,8 @@ async function renderCalendar() {
         const response = await fetch(`${API_BASE_URL}/notes`);
         if (response.ok) {
             const fetchedNotes = await response.json();
-            // Clear old notes from the local object
             notes = {}; // Reinitialize notes object
-            // Add fetched notes to the local notes object
             fetchedNotes.forEach(note => {
-                // Store note with user_name
                 notes[note.date] = { text: note.text, user_name: note.user_name };
             });
         } else {
@@ -116,7 +114,7 @@ async function renderCalendar() {
         setTimeout(() => loginMessage.textContent = '', 3000);
     }
     // *** End fetching notes from Backend ***
-    
+
     const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
     const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0);
     const daysInMonth = lastDayOfMonth.getDate();
@@ -124,18 +122,15 @@ async function renderCalendar() {
 
     currentMonthYear.textContent = new Date(currentYear, currentMonth).toLocaleString('th-TH', { month: 'long', year: 'numeric' });
 
-    // Define day names for display
-    const dayNames = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'];
-
-    // Add day names to the grid
-    dayNames.forEach(name => {
+    // Add day names to the grid (for desktop view, hidden on mobile by CSS)
+    thaiDayNames.forEach(name => { // ใช้ thaiDayNames ที่ประกาศไว้ด้านบน
         const dayNameCell = document.createElement('div');
         dayNameCell.classList.add('day-name');
         dayNameCell.textContent = name;
         calendarGrid.appendChild(dayNameCell);
     });
 
-    // สร้างช่องว่างของวันก่อนหน้า (เพื่อให้วันแรกของเดือนตรงกับวันในสัปดาห์)
+    // สร้างช่องว่างของวันก่อนหน้า
     for (let i = 0; i < firstDayOfWeek; i++) {
         const emptyCell = document.createElement('div');
         emptyCell.classList.add('day-cell', 'empty-day');
@@ -148,14 +143,22 @@ async function renderCalendar() {
         dayCell.classList.add('day-cell');
         
         // Determine the day of the week for styling
-        const currentDay = new Date(currentYear, currentMonth, i).getDay(); // 0 for Sunday, 6 for Saturday
-        if (currentDay === 0) {
-            dayCell.classList.add('sunday'); // Add class for Sunday
-        } else if (currentDay === 6) {
-            dayCell.classList.add('saturday'); // Add class for Saturday
+        const currentDay = new Date(currentYear, currentMonth, i);
+        const dayOfWeek = currentDay.getDay(); // 0 for Sunday, 6 for Saturday
+        if (dayOfWeek === 0) {
+            dayCell.classList.add('sunday');
+        } else if (dayOfWeek === 6) {
+            dayCell.classList.add('saturday');
         } else {
-            dayCell.classList.add('weekday'); // Add class for other weekdays (optional, for general styling)
+            dayCell.classList.add('weekday');
         }
+
+        // *** เริ่มต้นส่วนที่แก้ไขสำหรับแสดงชื่อวันในช่อง ***
+        const dayNameInCellSpan = document.createElement('span'); // สร้าง span สำหรับชื่อวัน
+        dayNameInCellSpan.classList.add('day-name-in-cell');
+        dayNameInCellSpan.textContent = thaiDayNames[dayOfWeek]; // ใส่ชื่อวันภาษาไทย
+        dayCell.appendChild(dayNameInCellSpan); // เพิ่มชื่อวันเข้าไปก่อนตัวเลข
+        // *** สิ้นสุดส่วนที่แก้ไขสำหรับแสดงชื่อวันในช่อง ***
 
         const dayNumber = document.createElement('div');
         dayNumber.classList.add('day-number');
@@ -167,7 +170,6 @@ async function renderCalendar() {
         if (noteData && noteData.text) {
             const noteDiv = document.createElement('div');
             noteDiv.classList.add('day-note');
-            // Add user's name to the note text and apply color class
             noteDiv.textContent = `${noteData.user_name}: ${noteData.text}`;
             
             // Apply user-specific color class
@@ -183,7 +185,7 @@ async function renderCalendar() {
         dayCell.addEventListener('click', () => {
             selectedDate = dateKey;
             modalDate.textContent = new Date(currentYear, currentMonth, i).toLocaleDateString('th-TH', { day: 'numeric', month: 'long', year: 'numeric' });
-            noteText.value = (notes[dateKey] && notes[dateKey].text) ? notes[dateKey].text : ''; // Display old note (if any)
+            noteText.value = (notes[dateKey] && notes[dateKey].text) ? notes[dateKey].text : '';
             
             // แสดง/ซ่อนปุ่มลบ ถ้ามีโน้ตอยู่
             if (notes[dateKey] && notes[dateKey].text) {
@@ -207,28 +209,40 @@ async function renderCalendar() {
 document.addEventListener('DOMContentLoaded', () => {
     // Check if user was previously logged in (e.g., from localStorage)
     // For this multi-user setup, we'll force login for simplicity
-    showLogin();
+    const storedUserName = localStorage.getItem('loggedInUserName');
+    const storedUserColorClass = localStorage.getItem('loggedInUserColorClass');
+
+    if (storedUserName && storedUserColorClass) {
+        const userKey = Object.keys(userConfig).find(key => userConfig[key].name === storedUserName);
+        if (userKey) {
+            loggedInUser = userConfig[userKey];
+            showCalendar();
+        } else {
+            showLogin();
+        }
+    } else {
+        showLogin();
+    }
 });
 
 // จัดการการส่งฟอร์ม Login
 loginForm.addEventListener('submit', (e) => {
-    e.preventDefault(); // ป้องกันการรีเฟรชหน้าเมื่อ submit ฟอร์ม
+    e.preventDefault();
     const password = passwordInput.value;
 
-    // Corrected logic: Find user by password (key of userConfig is the password)
-    const foundUser = Object.values(userConfig).find(u => u.password === password); // Find user object directly
+    const foundUser = Object.values(userConfig).find(u => u.password === password);
 
     if (foundUser) {
-        loggedInUser = foundUser; // Store the user's name and colorClass
-        loginMessage.textContent = ''; // Clear error message
-        localStorage.setItem('isAuthenticated', 'true'); // Store login status (can be enhanced with user ID)
-        localStorage.setItem('loggedInUserName', loggedInUser.name); // Store user name
-        localStorage.setItem('loggedInUserColorClass', loggedInUser.colorClass); // Store user color class
-        showCalendar(); // แสดงปฏิทิน
+        loggedInUser = foundUser;
+        loginMessage.textContent = '';
+        localStorage.setItem('isAuthenticated', 'true');
+        localStorage.setItem('loggedInUserName', loggedInUser.name);
+        localStorage.setItem('loggedInUserColorClass', loggedInUser.colorClass);
+        showCalendar();
     } else {
         loginMessage.textContent = 'รหัสผ่านไม่ถูกต้อง';
     }
-    passwordInput.value = ''; // Clear password field
+    passwordInput.value = '';
 });
 
 // จัดการปุ่มเปลี่ยนเดือน
@@ -252,7 +266,7 @@ nextMonthButton.addEventListener('click', () => {
 
 // จัดการปุ่มบันทึกโน้ต
 saveNoteButton.addEventListener('click', async () => {
-    if (selectedDate && loggedInUser) { // Ensure a user is logged in
+    if (selectedDate && loggedInUser) {
         const noteContent = noteText.value;
         
         try {
@@ -261,11 +275,9 @@ saveNoteButton.addEventListener('click', async () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                // Send user_name along with date and text
                 body: JSON.stringify({ date: selectedDate, text: noteContent, user_name: loggedInUser.name }),
             });
             if (response.ok) {
-                // Update local object with new note data including user_name
                 notes[selectedDate] = { text: noteContent, user_name: loggedInUser.name };
                 console.log('Note saved to backend successfully!');
             } else {
@@ -290,20 +302,20 @@ saveNoteButton.addEventListener('click', async () => {
 // จัดการปุ่มลบโน้ต
 deleteNoteButton.addEventListener('click', () => {
     if (selectedDate) {
-        confirmModal.style.display = 'flex'; // Show confirmation modal
+        confirmModal.style.display = 'flex';
     }
 });
 
 // Event listener for "Yes" button in Custom Confirmation Modal
 confirmDeleteYesButton.addEventListener('click', async () => {
-    confirmModal.style.display = 'none'; // Hide confirmation modal
+    confirmModal.style.display = 'none';
     if (selectedDate) {
         try {
             const response = await fetch(`${API_BASE_URL}/notes/${selectedDate}`, {
                 method: 'DELETE',
             });
             if (response.ok) {
-                delete notes[selectedDate]; // Delete from local object after successful deletion
+                delete notes[selectedDate];
                 console.log('Note deleted from backend successfully!');
             } else {
                 console.error('Failed to delete note from backend:', response.status, response.statusText);
@@ -323,7 +335,7 @@ confirmDeleteYesButton.addEventListener('click', async () => {
 
 // Event listener for "No" button in Custom Confirmation Modal
 confirmDeleteNoButton.addEventListener('click', () => {
-    confirmModal.style.display = 'none'; // Hide confirmation modal
+    confirmModal.style.display = 'none';
 });
 
 // Handle close note modal button
@@ -341,7 +353,6 @@ window.addEventListener('click', (event) => {
     if (event.target == noteModal) {
         noteModal.style.display = 'none';
     }
-    // For confirmModal
     if (event.target == confirmModal) {
         confirmModal.style.display = 'none';
     }
@@ -353,25 +364,4 @@ logoutButton.addEventListener('click', () => {
     localStorage.removeItem('loggedInUserName');
     localStorage.removeItem('loggedInUserColorClass');
     showLogin();
-});
-
-// Initial check on page load
-document.addEventListener('DOMContentLoaded', () => {
-    const storedUserName = localStorage.getItem('loggedInUserName');
-    const storedUserColorClass = localStorage.getItem('loggedInUserColorClass');
-
-    // Re-populate loggedInUser if data exists in localStorage
-    if (storedUserName && storedUserColorClass) {
-        // Find the user config based on the stored name to get the password (key)
-        const userKey = Object.keys(userConfig).find(key => userConfig[key].name === storedUserName);
-        if (userKey) {
-            loggedInUser = userConfig[userKey]; // Set loggedInUser from userConfig
-            showCalendar();
-        } else {
-            // If stored user not found in userConfig (e.g., userConfig changed), force login
-            showLogin();
-        }
-    } else {
-        showLogin();
-    }
 });

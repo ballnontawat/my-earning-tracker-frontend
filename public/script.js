@@ -54,7 +54,7 @@ let selectedDate = null; // Selected date for note taking
 let noteToDeleteId = null; // เก็บ ID ของโน้ตที่กำลังจะลบ
 
 // เปลี่ยน URL API ของคุณตามที่ Render.com ให้มา
-const API_BASE_URL = 'https://my-calendar-backend-api.onrender.com/api'; 
+const API_BASE_URL = 'https://my-earning-tracker-backend-api.onrender.com'; 
 
 // *** เปลี่ยนโครงสร้าง notes ให้เก็บ Array ของโน้ตสำหรับแต่ละวัน ***
 // ตัวอย่าง: notes = { '2025-07-07': [{id: 'abc', text: 'ประชุม', user_name: 'บอล'}, {id: 'def', text: 'ส่งงาน', user_name: 'ราม'}] }
